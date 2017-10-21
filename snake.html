@@ -6,41 +6,24 @@
   <meta name="googlebot" content="noindex, nofollow">
 
   <script type="text/javascript"
-src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-
-  
-
-  
-
-  
-
-  
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
-  
-
-  
-
+src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   <style type="text/css">
-    #inputs {
-      background: red;
+#inputs {
+  background: red;
   color:blue;
-  //margin: 10px;
-  //border: 10px solid lime;
   padding: 20px;
 }
 #inputs input {
-      font-family: sans-serif;
+  font-family: sans-serif;
   font-size: 0.9em;
 }
 #outputs {
-      background: FireBrick;
+  background: FireBrick;
   color:blue;
-  //margin: 10px;
-  //border: 10px solid lime;
   padding: 20px;
 }
 #outputs p {
-      margin: 0;
+  margin: 0;
 }
 .boxed {
       background: white;
@@ -76,122 +59,102 @@ src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 
 
 
-<script type='text/javascript'>//<![CDATA[
+<script type='text/javascript'>
 window.onload=function(){
-    function draw_snake(){
-      var rows = parseInt($("#rows").val());
-  var cols = parseInt($("#cols").val());
-  var row_final; var col_final; 
-  var scale = 1;
+    function draw_snake() {
+        var rows = parseInt($("#rows").val());
+        var cols = parseInt($("#cols").val());
+        var row_final; var col_final; 
+        var scale = 1;
+
+        if (rows < cols){
+            if (rows % 2){
+                row_final = (rows+1)/2;
+                col_final = row_final;
+            } else {
+                row_final = rows/2;
+                col_final = cols + 1 - row_final;
+            }
+        } else {
+            if (cols % 2){
+                col_final = (cols+1)/2;
+                row_final = col_final;
+            } else {
+                col_final = cols/2 + 1;
+                row_final = rows - col_final + 1;
+            }
+        }
+        $("#last_row").text(row_final);
+        $("#last_col").text(col_final);
   
-  if (rows < cols){
-        if (rows % 2){
-            row_final = (rows+1)/2;
-      col_final = row_final;
-    } else {
-            row_final = rows/2;
-      col_final = cols + 1 - row_final;
-    }
-  } else {
-        if (cols % 2){
-            col_final = (cols+1)/2;
-      row_final = col_final;
-    } else {
-            col_final = cols/2 + 1;
-      row_final = rows - col_final + 1;
-    }
-  }
-  $("#last_row").text(row_final);
-  $("#last_col").text(col_final);
-  
-  // clear the canvas, forget the old line path
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.beginPath();
-  // draw the rectangle according to user input
-  ctx.fillStyle = "green";
-    ctx.fillRect(0.5, 0.5,cols,rows); // origin 0.5, 0,5 keeps things
-centered
-  // draw a red dot at the final point
-  ctx.fillStyle = "red";
-  ctx.fillRect(col_final-0.5, row_final-0.5, 1, 1);
-  // the snake, integers here represent the last "open" line
-  var row_b = rows; var row_t = 1;
-  var col_r = cols; var col_l = 1;
-  ctx.strokeStyle="yellow";
-  ctx.moveTo(col_r+0.1, row_b);
-  while (1){
-        // first move is always left
-    if (col_r < col_l) {break};
-    ctx.lineTo(col_l,row_b); ctx.stroke();
-    row_b--;
-    // up
-    if (row_t > row_b) {break};
-    ctx.lineTo(col_l,row_t); ctx.stroke();
-    col_l++;
-    // right
-    if (col_r < col_l) {break};
-    ctx.lineTo(col_r,row_t); ctx.stroke();
-    row_t++;
-    // down
-    if (row_t > row_b) {break};
-    ctx.lineTo(col_r,row_b); ctx.stroke();
-    col_r--;
-  }
-  $("#debug").prepend("col_l:"+col_l+" col_r:"+col_r+" row_t:"+row_t+"
-row_b:"+row_b+"\n");
-  //$("#debug").prepend("draw_snake\n");
-}
+        // clear the canvas, forget the old line path
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        // draw the rectangle according to user input
+        ctx.fillStyle = "green";
+        // origin 0.5, 0,5 keeps things centered
+        ctx.fillRect(0.5, 0.5,cols,rows); 
+        // draw a red dot at the final point
+        ctx.fillStyle = "red";
+        ctx.fillRect(col_final-0.5, row_final-0.5, 1, 1);
+        // the snake, integers here represent the last "open" line
+        var row_b = rows; var row_t = 1;
+        var col_r = cols; var col_l = 1;
+        ctx.strokeStyle="yellow";
+        ctx.moveTo(col_r+0.1, row_b);
+        while (1){
+            // first move is always left
+            if (col_r < col_l) {break};
+            ctx.lineTo(col_l,row_b); ctx.stroke();
+            row_b--;
+            // up
+            if (row_t > row_b) {break};
+            ctx.lineTo(col_l,row_t); ctx.stroke();
+            col_l++;
+            // right
+            if (col_r < col_l) {break};
+            ctx.lineTo(col_r,row_t); ctx.stroke();
+            row_t++;
+            // down
+            if (row_t > row_b) {break};
+            ctx.lineTo(col_r,row_b); ctx.stroke();
+            col_r--;
+        }
+        $("#debug").prepend("col_l:"+col_l+" col_r:"+col_r+" row_t:"+row_t+" row_b:"+row_b+"\n");
+    } // function draw_snake
 
-// global variables
-var canvas = $("#snake_2d")[0];
-var ctx = canvas.getContext("2d");
-ctx.scale(10,7);
-ctx.lineWidth = 1/5;
-// main, runs once when page is loaded
-$(function() {
-      $("#rows").on("keyup", function(){draw_snake()});
-  $("#cols").on("keyup", function(){draw_snake()});
-  draw_snake();
-});
-
-}//]]> 
-
+    // global variables
+    var canvas = $("#snake_2d")[0];
+    var ctx = canvas.getContext("2d");
+    ctx.scale(10,7);
+    ctx.lineWidth = 1/5;
+    // main, runs once when page is loaded
+    $(function() {
+        $("#rows").on("keyup", function(){draw_snake()});
+        $("#cols").on("keyup", function(){draw_snake()});
+        draw_snake();
+    });
+} // onload
 </script>
-
-  
 </head>
 
 <body>
-  <div id="inputs">
-  <p>
-  edit rows: and cols: as you like!
-  </p>
-   <label for="rows">rows:</label>
-   <input type="text" size=4 id="rows" value=9>&nbsp&nbsp
-   <label for="cols">cols:</label>
-   <input type="text" size=4 id="cols" value=12>
-</div>
-<div id="outputs">
-  <p>
-  last_row: <span class="boxed" id="last_row">out</span>&nbsp&nbsp
-  last_col: <span class="boxed" id="last_col">out</span>
-  </p>
-</div>
-<div id="snake_div">
-<canvas id="snake_2d" />
-</div>
-<pre id="debug">debugging space</pre>
-  
-  <script>
-  // tell the embed parent frame the height of the content
-  if (window.parent && window.parent.parent){
-        window.parent.parent.postMessage(["resultsFrame", {
-          height: document.body.getBoundingClientRect().height,
-      slug: "nrr0bmo2"
-    }], "*")
-  }
-</script>
-
+    <div id="inputs">
+        <p>edit rows: and cols: as you like!</p>
+        <label for="rows">rows:</label>
+        <input type="text" size=4 id="rows" value=9>&nbsp&nbsp
+        <label for="cols">cols:</label>
+        <input type="text" size=4 id="cols" value=12>
+    </div>
+    <div id="outputs">
+        <p>
+        last_row: <span class="boxed" id="last_row">out</span>&nbsp&nbsp
+        last_col: <span class="boxed" id="last_col">out</span>
+        </p>
+    </div>
+    <div id="snake_div">
+        <canvas id="snake_2d" />
+    </div>
+    <pre id="debug">debugging space</pre>
 </body>
-
 </html>
