@@ -39,8 +39,6 @@ src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 }
 
 #snake_2d {
-      width: 400px;
-  height: 300px;
   border: 1px solid black;
   background: blue;
 }
@@ -50,15 +48,7 @@ src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   color: lime;
 }
   </style>
-
   <title> by savinidad</title>
-
-  
-    
-
-
-
-
 <script type='text/javascript'>
 window.onload=function(){
     function draw_snake() {
@@ -126,7 +116,7 @@ window.onload=function(){
     // global variables
     var canvas = $("#snake_2d")[0];
     var ctx = canvas.getContext("2d");
-    ctx.scale(10,7);
+    ctx.scale(10,10);
     ctx.lineWidth = 1/5;
     // main, runs once when page is loaded
     $(function() {
@@ -153,7 +143,7 @@ window.onload=function(){
         </p>
     </div>
     <div id="snake_div">
-        <canvas id="snake_2d" />
+        <canvas id="snake_2d" width="500" height="500" />
     </div>
     <pre id="debug">debugging space</pre>
 </body>
